@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SecureHarness — Simple Secure Tunnel Manager</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    
+    <!-- Top Header -->
+    <header>
+      <div class="brand">
+        <div class="brand-icon">🛡️</div>
+        <div class="brand-text">
+          <h1>SecureHarness Tunnel</h1>
+          <p>Protected Real-Time Information Sharing</p>
+        </div>
+      </div>
+      <div class="status-pill">
+        <div class="dot"></div>
+        <span>Tunnel Protected & Active</span>
+      </div>
+    </header>
+
+    <!-- Top Key Metrics -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">Packets Processed</div>
+        <div class="stat-val" id="statPackets">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Threats Blocked</div>
+        <div class="stat-val" style="color: var(--danger);" id="statThreats">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Data Transferred</div>
+        <div class="stat-val" id="statBytes">0 KB</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">System Health</div>
+        <div class="stat-val" style="color: var(--success);" id="statHealth">100% OK</div>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="tabs-nav">
+      <button class="tab-btn active" onclick="switchTab('tab-whatsapp')">📱 WhatsApp & Email Armor</button>
+      <button class="tab-btn" onclick="switchTab('tab-send')">💬 Direct Tunnel Send</button>
+      <button class="tab-btn" onclick="switchTab('tab-test')">🧪 Test Security Defenses</button>
+      <button class="tab-btn" onclick="switchTab('tab-log')">📋 Live Activity Log</button>
+      <button class="tab-btn" onclick="switchTab('tab-status')">🛡️ How It Protects You</button>
+    </div>
+
+    <!-- Tab 0: WhatsApp & Email Armor Tool -->
+    <div id="tab-whatsapp" class="tab-content active">
+      <div class="panel">
+        <h2 class="panel-title">WhatsApp, Social Media & Email Protection Bridge</h2>
+        <p class="panel-desc">Protect your messages before pasting them into WhatsApp Web, Email, SMS, or Social Media. Even if public Wi-Fi, WhatsApp servers, or ISPs inspect your chat, they see only encrypted noise.</p>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1rem;">
+          
+          <!-- Box 1: Lock for WhatsApp -->
+          <div style="background: var(--bg-input); padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border);">
+            <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--primary);">
+              🔒 1. Lock Message for WhatsApp
+            </h3>
+            <p style="font-size: 0.8rem; color: var(--text-dim); margin-bottom: 0.75rem;">
+              Type confidential text here to sign with Ed25519, pad with TRANSEC, and encrypt with AES-256-GCM:
+            </p>
+            <textarea id="whatsappPlainText" style="width: 100%; height: 90px; background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 6px; padding: 0.5rem; color: #fff; font-family: var(--font); font-size: 0.85rem; resize: vertical;" placeholder="Type confidential WhatsApp message here..."></textarea>
+            <button class="btn-primary" style="margin-top: 0.5rem; width: 100%; justify-content: center;" onclick="lockForWhatsApp()">
+              🛡️ Lock & Generate WhatsApp Armor
+            </button>
+
+            <div id="whatsappLockResult" style="display: none; margin-top: 0.75rem;">
+              <p style="font-size: 0.75rem; color: var(--success); font-weight: 600; margin-bottom: 0.25rem;">✅ Armored Text Ready for WhatsApp:</p>
+              <textarea id="whatsappArmoredOutput" readonly style="width: 100%; height: 110px; background: rgba(0,0,0,0.5); border: 1px solid var(--border-active); border-radius: 6px; padding: 0.5rem; color: #38bdf8; font-family: var(--mono); font-size: 0.7rem; resize: vertical;"></textarea>
+              <button class="btn-test" style="width: 100%; margin-top: 0.4rem; background: rgba(59, 130, 246, 0.2); color: #fff;" onclick="copyWhatsAppArmor()">
+                📋 Copy to Clipboard & Paste into WhatsApp
+              </button>
+            </div>
+          </div>
+
+          <!-- Box 2: Unlock from WhatsApp -->
+          <div style="background: var(--bg-input); padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border);">
+            <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--success);">
+              🔓 2. Unlock Received WhatsApp Message
+            </h3>
+            <p style="font-size: 0.8rem; color: var(--text-dim); margin-bottom: 0.75rem;">
+              Paste the armored text received from WhatsApp or Email below to verify and decrypt it:
+            </p>
+            <textarea id="whatsappArmoredInput" style="width: 100%; height: 90px; background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 6px; padding: 0.5rem; color: #38bdf8; font-family: var(--mono); font-size: 0.75rem; resize: vertical;" placeholder="Paste -----BEGIN SECURE HARNESS FRAME----- here..."></textarea>
+            <button class="btn-primary" style="margin-top: 0.5rem; width: 100%; justify-content: center; background: var(--success);" onclick="unlockFromWhatsApp()">
+              🔍 Verify Signature & Unlock Message
+            </button>
+
+            <div id="whatsappUnlockResult" style="display: none; margin-top: 0.75rem;">
+              <div id="whatsappUnlockCard" class="result-card" style="display: block; margin-top: 0;">
+                <div class="result-title" id="whatsappUnlockTitle"></div>
+                <div class="result-details" id="whatsappUnlockDetails"></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 1: Send Secure Message -->
+    <div id="tab-send" class="tab-content">
+      <div class="panel">
+        <h2 class="panel-title">Send Protected Information Through Direct Tunnel</h2>
+        <p class="panel-desc">Type any confidential message or data below. The harness will encrypt it with AES-256-GCM, verify its integrity, and pass it securely through the tunnel.</p>
+        
+        <form class="messenger-box" onsubmit="event.preventDefault(); sendCustomPayload();">
+          <div class="input-row">
+            <input type="text" id="payloadInput" class="input-text" placeholder="Enter confidential message, update, or secret payload..." autocomplete="off">
+            <button type="submit" class="btn-primary">
+              <span>Send Securely</span> ➔
+            </button>
+          </div>
+        </form>
+
+        <div id="resultCard" class="result-card">
+          <div class="result-title" id="resultTitle">✅ Transmission Succeeded</div>
+          <div class="result-details" id="resultDetails"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 2: Test Security Defenses -->
+    <div id="tab-test" class="tab-content">
+      <div class="panel">
+        <h2 class="panel-title">Interactive Threat & Interference Testing</h2>
+        <p class="panel-desc">Click any scenario below to verify that the tunnel actively detects, quarantines, and blocks real threats in real time.</p>
+        
+        <div class="test-cards-grid">
+          <div class="test-card">
+            <h4>🦠 Antivirus Detection</h4>
+            <p>Injects standard test virus pattern (EICAR) into the tunnel.</p>
+            <button class="btn-test danger" onclick="runTest('EICAR')">Run Virus Test</button>
+          </div>
+
+          <div class="test-card">
+            <h4>💻 Remote Shell Exploit</h4>
+            <p>Attempts to pass an interactive shell execution script.</p>
+            <button class="btn-test danger" onclick="runTest('REVSHELL')">Run Exploit Test</button>
+          </div>
+
+          <div class="test-card">
+            <h4>🔄 Replay Attack</h4>
+            <p>Captures an authorized message and replays it over the wire.</p>
+            <button class="btn-test" onclick="runTest('REPLAY')">Run Replay Test</button>
+          </div>
+
+          <div class="test-card">
+            <h4>✂️ In-Flight Tampering</h4>
+            <p>Simulates a hacker modifying 4 bits of the encrypted ciphertext.</p>
+            <button class="btn-test" onclick="runTest('TAMPER_HMAC')">Run Tamper Test</button>
+          </div>
+
+          <div class="test-card">
+            <h4>💥 Buffer Overflow Bug</h4>
+            <p>Sends a malformed frame format designed to crash network buffers.</p>
+            <button class="btn-test" onclick="runTest('BUFFER_OVERFLOW')">Run Bug Test</button>
+          </div>
+
+          <div class="test-card">
+            <h4>🔍 Codebase Integrity Check</h4>
+            <p>Scans all program files against baseline SHA-256 signatures.</p>
+            <button class="btn-test" onclick="checkIntegrity()">Audit Code Integrity</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 3: Live Activity Log -->
+    <div id="tab-log" class="tab-content">
+      <div class="panel">
+        <h2 class="panel-title">Real-Time Security & Telemetry Stream</h2>
+        <p class="panel-desc">All tunnel handshakes, incoming frames, security alerts, and hash chain updates.</p>
+        
+        <div class="feed-container" id="feedList">
+          <!-- Feed items inserted here -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab 4: Protection Overview -->
+    <div id="tab-status" class="tab-content">
+      <div class="panel">
+        <h2 class="panel-title">10-Layer Hardened Defense Pipeline (COMSEC / STRIDE Compliant)</h2>
+        <p class="panel-desc">Every piece of data sent through SecureHarness automatically passes through these protections in sequence to defeat Dolev-Yao network adversaries:</p>
+        
+        <div class="checklist">
+          <div class="check-item">
+            <div class="check-icon">🔐</div>
+            <div class="check-content">
+              <h4>1. AES-256-GCM + X25519 Key Ratchet</h4>
+              <p>Hardware AEAD encryption with forward secrecy and automated periodic session key rotation (PFS).</p>
+            </div>
+          </div>
+
+          <div class="check-item">
+            <div class="check-icon">✍️</div>
+            <div class="check-content">
+              <h4>2. Ed25519 Non-Repudiation Signatures</h4>
+              <p>Every frame is digitally signed with an asymmetric Ed25519 keypair, providing irrefutable sender authenticity.</p>
+            </div>
+          </div>
+
+          <div class="check-item">
+            <div class="check-icon">📦</div>
+            <div class="check-content">
+              <h4>3. TRANSEC Traffic Analysis Defense</h4>
+              <p>Enforces uniform 512-byte block padding to prevent packet length fingerprinting and metadata leakage.</p>
+            </div>
+          </div>
+
+          <div class="check-item">
+            <div class="check-icon">🛡️</div>
+            <div class="check-content">
+              <h4>4. Downgrade & Masquerade Shield</h4>
+              <p>Enforces MIN_PROTOCOL_VERSION and validates peer cryptographic public key fingerprints (mTLS pinning).</p>
+            </div>
+          </div>
+
+          <div class="check-item">
+            <div class="check-icon">🔄</div>
+            <div class="check-content">
+              <h4>5. Anti-Interference & Truncation</h4>
+              <p>Sliding window anti-replay, sequence gap monitoring, and post-close injection defense.</p>
+            </div>
+          </div>
+
+          <div class="check-item">
+            <div class="check-icon">🐛</div>
+            <div class="check-content">
+              <h4>6. Dual-Stage Anti-Bug Validator</h4>
+              <p>Deep inspection before and after decryption against buffer overflows, format strings, and path traversals.</p>
+            </div>
+          </div>
+
+          <div class="check-item">
+            <div class="check-icon">🦠</div>
+            <div class="check-content">
+              <h4>7. Antivirus & Shannon Entropy</h4>
+              <p>Scans payloads against malware signatures and detects packed/obfuscated code via statistical entropy analysis.</p>
+            </div>
+          </div>
+
+          <div class="check-item">
+            <div class="check-icon">📡</div>
+            <div class="check-content">
+              <h4>8. Covert Channel & Exfil Defense</h4>
+              <p>Detects and blocks DNS tunneling, base64 data leakage, and steganographic embedded file markers.</p>
+            </div>
+          </div>
+
+          <div class="check-item">
+            <div class="check-icon">🔒</div>
+            <div class="check-content">
+              <h4>9. Anti-Tamper Chain of Custody</h4>
+              <p>Maintains an immutable SHA-256 Merkle hash chain across all packets to detect any in-flight bit alterations.</p>
+            </div>
+          </div>
+
+          <div class="check-item">
+            <div class="check-icon">🧱</div>
+            <div class="check-content">
+              <h4>10. Isolated Process Sandbox</h4>
+              <p>Contained subprocess execution environment with execution timeouts and automatic threat quarantine.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
